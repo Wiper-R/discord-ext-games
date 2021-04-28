@@ -1,6 +1,5 @@
 from setuptools import setup
 
-
 setup(
     name="discord-ext-games",
     author="Wiper-R",

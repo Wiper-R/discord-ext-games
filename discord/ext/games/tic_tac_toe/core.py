@@ -97,10 +97,7 @@ class TicTacToe:
             if self._turn_of != payload.member:
                 return False
 
-            emoji = str(payload.emoji)
-
-            if emoji not in self._remaining_moves:
-                print("WHY")
+            if str(payload.emoji) not in self._remaining_moves:
                 return False
 
             return True
@@ -182,8 +179,6 @@ class TicTacToe:
     async def send_initial_message(self):
         embed = self.board_to_embed()
         self.message = await self.ctx.send(embed=embed)
-        await self.apply_reactions()
-        self.take_moves.start()
 
     async def apply_reactions(self):
         for move in list(self._config.values())[3:]:
@@ -191,3 +186,5 @@ class TicTacToe:
 
     async def start(self):
         await self.send_initial_message()
+        await self.apply_reactions()
+        self.take_moves.start()
