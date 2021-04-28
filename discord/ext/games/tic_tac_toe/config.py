@@ -1,5 +1,10 @@
 class _Config:
     def __init__(self):
+        """
+        BLOCKS : "white_page", "emoji_x", "emoji_o"
+
+        REACTION_EMOJIS: "up_left", "up", "up_right", "left", "mid", "right", "down_left", "down", "down_right",
+        """
         __slots__ = (
             "white_page",
             "emoji_x",
@@ -18,7 +23,7 @@ class _Config:
         self.update()
 
     def update(self, **kwargs):
-        self.white_page = kwargs.get("white_page", "\N{LARGE BLUE SQUARE}")
+        self.blank = kwargs.get("blank", "\N{LARGE BLUE SQUARE}")
         self.emoji_x = kwargs.get("x", "\N{REGIONAL INDICATOR SYMBOL LETTER X}")
         self.emoji_o = kwargs.get("o", "\N{REGIONAL INDICATOR SYMBOL LETTER O}")
         self.up_left = kwargs.get("up_left", "\N{NORTH WEST ARROW}")

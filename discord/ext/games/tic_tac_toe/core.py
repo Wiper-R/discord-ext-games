@@ -35,7 +35,7 @@ class TicTacToe:
         data = []
         for move in self._board:
             if move == Move.empty:
-                data.append(self._config["white_page"])
+                data.append(self._config["blank"])
             elif move == Move.x:
                 data.append(self._config["emoji_x"])
             elif move == Move.o:
