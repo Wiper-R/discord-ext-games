@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name="discord-ext-games",
     author="Wiper-R",
-    version="1.0.7",
+    version="1.0.9",
     packages=["discord.ext.games", "discord.ext.games.tic_tac_toe"],
     license="MIT",
     description="This library provides bunch of games that can be played on discord.",
