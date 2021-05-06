@@ -1,1 +1,1 @@
-from . import tic_tac_toe
+from .tic_tac_toe import TicTacToe

@@ -3,7 +3,7 @@
 
 ```py
 import discord
-from discord.ext.games.tic_tac_toe import TicTacToe
+from discord.ext.games import TicTacToe
 from discord.ext import commands
 
 bot = commands.Bot("!")
