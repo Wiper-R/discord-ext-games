@@ -2,9 +2,7 @@ import asyncio
 import itertools
 import discord
 from discord import message
-from discord.emoji import Emoji
 from .config import Config
-import random
 from enum import Enum
 from discord.ext import tasks
 import traceback
@@ -17,7 +15,7 @@ class Move(Enum):
 
 
 class TicTacToe:
-    def __init__(self, ctx, users):
+    def __init__(self, ctx, users, *, config=None):
         self.ctx = ctx
         self.bot = ctx.bot
         self.users = users
@@ -27,6 +25,7 @@ class TicTacToe:
         self._turn_of = next(self._cycle_users)
         self.message = message
         self.winner = None
+        self.config = config or {}
         self.refactor_config()
         self.remaining_moves()
 
@@ -46,7 +45,10 @@ class TicTacToe:
     def refactor_config(self):
         self._config = {}
         for slot in Config.__slots__:
-            value = getattr(Config, slot)
+            try:
+                value = self.config.pop(slot)
+            except KeyError:
+                value = getattr(Config, slot)
 
             if isinstance(value, int):
                 emoji = self.bot.get_emoji(value)
@@ -57,6 +59,9 @@ class TicTacToe:
                 raise RuntimeError("Emoji must either be a discord snowflake or a unicode character.")
 
             self._config[slot] = emoji
+
+        if len(self.config) > 0:
+            raise RuntimeError("Invalid configuration values.")
 
     def remaining_moves(self):
         self._remaining_moves = {}

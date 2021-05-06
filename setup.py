@@ -4,6 +4,7 @@ setup(
     name="discord-ext-games",
     author="Wiper-R",
     version="1.0.9",
+    url="https://github.com/Wiper-R/discord-ext-games",
     packages=["discord.ext.games", "discord.ext.games.tic_tac_toe"],
     license="MIT",
     description="This library provides bunch of games that can be played on discord.",
