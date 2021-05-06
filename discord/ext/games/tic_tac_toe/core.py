@@ -2,6 +2,7 @@ import asyncio
 import itertools
 import discord
 from discord import message
+
 from .config import Config
 from enum import Enum
 from discord.ext import tasks

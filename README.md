@@ -13,13 +13,13 @@ bot = commands.Bot("!")
 async def on_ready():
     print("Bot is Ready!")
 
-# If you don't want to customize emojis, Just ignore this function
-TicTacToeConfig.update(down_right=675624269073481749, x=536043344569303041)
-
 
 @bot.command()
 async def ttt(ctx, member: discord.Member):
-    await TicTacToe(ctx, [ctx.author, member]).start()
+    await TicTacToe(ctx, [ctx.author, member], config={
+        'down_right': 675624269073481749,
+        'x':536043344569303041,
+    }).start()
 
 
 bot.run("")
