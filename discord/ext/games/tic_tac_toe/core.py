@@ -132,6 +132,7 @@ class TicTacToe:
             if row.count(row[0]) == len(row) and row[0] != Move.empty:
                 self.winner = _moves[row[0]]
                 self.stop()
+                break
 
     async def run_move(self, member, emoji):
         self._turn_of = next(self._cycle_users)
