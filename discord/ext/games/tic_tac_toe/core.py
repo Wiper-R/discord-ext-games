@@ -21,8 +21,8 @@ class TicTacToe:
         self.bot = ctx.bot
         self.users = users
         self._board = [Move.empty for _ in range(9)]
-        self._moves = {users[0]: Move.x, users[1]: Move.o}
         random.shuffle(users)
+        self._moves = {users[0]: Move.x, users[1]: Move.o}
         self._cycle_users = itertools.cycle(users)
         self._turn_of = next(self._cycle_users)
         self.message = None
