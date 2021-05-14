@@ -17,7 +17,7 @@ class Move(Enum):
 
 class TicTacToe:
     def __init__(self, ctx, users, *, config=None):
-        self.ctx = None
+        self.ctx = ctx
         self.bot = ctx.bot
         self.users = users
         self._board = [Move.empty for _ in range(9)]
