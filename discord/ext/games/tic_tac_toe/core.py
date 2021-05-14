@@ -3,10 +3,11 @@ import itertools
 import discord
 import random
 
-from .config import Config
+from .config import CONFIG
 from enum import Enum
 from discord.ext import tasks
 import traceback
+from discord.ext.commands.errors import EmojiNotFound
 
 
 class Move(Enum):
@@ -40,14 +41,16 @@ class TicTacToe:
 
         _config = self._config.copy()
 
-        for slot in Config.__slots__:
+        for slot in CONFIG.__slots__:
             try:
                 value = _config.pop(slot)
             except KeyError:
-                value = getattr(Config, slot)
+                value = getattr(CONFIG, slot)
 
             if isinstance(value, int):
                 emoji = self.bot.get_emoji(value)
+                if emoji is None:
+                    raise EmojiNotFound(value)
 
             elif isinstance(value, str):
                 emoji = value
@@ -61,7 +64,7 @@ class TicTacToe:
 
     def remaining_moves(self):
         self._remaining_moves = {}
-        for idx, slot in enumerate(Config.__slots__[3:]):
+        for idx, slot in enumerate(CONFIG.__slots__[3:]):
             key = str(self.config[slot])
             self._remaining_moves[key] = idx
 
@@ -89,13 +92,11 @@ class TicTacToe:
 
     @tasks.loop()
     async def take_moves(self):
-        def check(payload):
-            if self._turn_of != payload.member:
-                return False
-            if str(payload.emoji) not in self._remaining_moves:
-                return False
-            return True
-
+        check = (
+            lambda payload: payload.user_id == self._turn_of.id
+            and str(payload.emoji) in self._remaining_moves
+            and payload.message_id == self.message.id
+        )
         try:
             payload = await self.bot.wait_for("raw_reaction_add", check=check, timeout=30)
             emoji = str(payload.emoji)
@@ -108,7 +109,7 @@ class TicTacToe:
     def stop(self):
         self.take_moves.stop()
 
-    def determine_win(self):
+    def determine_winner(self):
         rows = []
         board = self._board
 
@@ -125,20 +126,16 @@ class TicTacToe:
 
         # / Diagonal
         rows.append(board[2:-1:2])
-
-        _moves = {value: key for key, value in self._moves.items()}
-
         for row in rows:
             if row.count(row[0]) == len(row) and row[0] != Move.empty:
-                self.winner = _moves[row[0]]
                 self.stop()
-                break
+                return self._turn_of
 
     async def run_move(self, member, emoji):
-        self._turn_of = next(self._cycle_users)
         move = self._remaining_moves.pop(emoji)
         self._board[move] = self._moves[member]
-        self.determine_win()
+        self.winner = self.determine_winner()
+        self._turn_of = next(self._cycle_users)
         embed = self.board_to_embed()
         await self.message.edit(embed=embed)
         if self.winner is None:

@@ -1,4 +1,4 @@
-class Config:
+class CONFIG:
     __slots__ = (
         "blank",
         "emoji_x",
