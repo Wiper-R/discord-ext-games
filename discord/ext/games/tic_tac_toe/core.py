@@ -37,9 +37,12 @@ class TicTacToe:
 
     def refactor_config(self):
         self.config = {}
+
+        _config = self._config.copy()
+
         for slot in Config.__slots__:
             try:
-                value = self._config.pop(slot)
+                value = _config.pop(slot)
             except KeyError:
                 value = getattr(Config, slot)
 
@@ -53,7 +56,7 @@ class TicTacToe:
 
             self.config[slot] = emoji
 
-        if len(self._config) > 0:
+        if len(_config) > 0:
             raise RuntimeError("Invalid configuration values.")
 
     def remaining_moves(self):
@@ -106,34 +109,29 @@ class TicTacToe:
         self.take_moves.stop()
 
     def determine_win(self):
-        swapped_moves = {value: key for key, value in self._moves.items()}
-
-        def check_and_store_win(row):
-            if row.count(row[0]) == len(row) and row[0] != Move.empty:
-                self.winner = swapped_moves[row[0]]
-                self.stop()
-                return True
-            return False
-
+        rows = []
         board = self._board
+
         # Horizontal _
         for i in range(0, 9, 3):
-            row = board[i : i + 3]
-            if check_and_store_win(row):
-                return
+            rows.append(board[i : i + 3])
+
         # Verticle |
         for i in range(3):
-            row = board[i::3]
-            if check_and_store_win(row):
-                return
+            rows.append(board[i::3])
+
         # \ Diagonal
-        board[::4]
-        if check_and_store_win(row):
-            return
+        rows.append(board[::4])
+
         # / Diagonal
-        row = board[2:-1:2]
-        if check_and_store_win(row):
-            return
+        rows.append(board[2:-1:2])
+
+        _moves = {value: key for key, value in self._moves.items()}
+
+        for row in rows:
+            if row.count(row[0]) == len(row) and row[0] != Move.empty:
+                self.winner = _moves[row[0]]
+                self.stop()
 
     async def run_move(self, member, emoji):
         self._turn_of = next(self._cycle_users)
