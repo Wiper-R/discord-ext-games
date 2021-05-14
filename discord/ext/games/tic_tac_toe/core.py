@@ -2,7 +2,6 @@ import asyncio
 import itertools
 import discord
 import random
-from discord import message
 
 from .config import Config
 from enum import Enum
@@ -18,7 +17,7 @@ class Move(Enum):
 
 class TicTacToe:
     def __init__(self, ctx, users, *, config=None):
-        self.ctx = ctx
+        self.ctx = None
         self.bot = ctx.bot
         self.users = users
         self._board = [Move.empty for _ in range(9)]
@@ -26,7 +25,7 @@ class TicTacToe:
         random.shuffle(users)
         self._cycle_users = itertools.cycle(users)
         self._turn_of = next(self._cycle_users)
-        self.message = message
+        self.message = None
         self.winner = None
         self._config = config or {}
         self.refactor_config()
