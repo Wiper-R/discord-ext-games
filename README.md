@@ -18,7 +18,7 @@ async def on_ready():
 async def ttt(ctx, member: discord.Member):
     await TicTacToe(ctx, [ctx.author, member], config={
         'down_right': 675624269073481749,
-        'emoji_x':536043344569303041,
+        'x':536043344569303041,
     }).start()
 
 

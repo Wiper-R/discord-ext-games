@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name="discord-ext-games",
     author="Wiper-R",
-    version="1.1.3",
+    version="1.1.4",
     url="https://github.com/Wiper-R/discord-ext-games",
     packages=["discord.ext.games", "discord.ext.games.tic_tac_toe"],
     license="MIT",

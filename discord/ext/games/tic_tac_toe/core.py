@@ -11,9 +11,9 @@ from discord.ext.commands.errors import EmojiNotFound
 
 
 class Move(Enum):
-    empty = "blank"
-    x = "emoji_x"
-    o = "emoji_o"
+    empty = "empty"
+    x = "x"
+    o = "o"
 
 
 class TicTacToe:
@@ -38,9 +38,7 @@ class TicTacToe:
 
     def refactor_config(self):
         self.config = {}
-
         _config = self._config.copy()
-
         for slot in CONFIG.__slots__:
             try:
                 value = _config.pop(slot)
@@ -51,7 +49,6 @@ class TicTacToe:
                 emoji = self.bot.get_emoji(value)
                 if emoji is None:
                     raise EmojiNotFound(value)
-
             elif isinstance(value, str):
                 emoji = value
             else:
@@ -78,7 +75,7 @@ class TicTacToe:
         if len(self._remaining_moves) == 0 and self.winner is None:
             messages.append("Match Draw!\n")
         elif self.winner is None and len(self._remaining_moves) > 0:
-            messages.append(f"{self._turn_of} Turn **({self._moves[self._turn_of].value})**\n")
+            messages.append(f"{self._turn_of} Turn **({self._moves[self._turn_of].value.upper()})**\n")
         elif self.winner is not None:
             messages.append(f"Winner {self.winner}!\n")
 
@@ -91,7 +88,7 @@ class TicTacToe:
         return embed
 
     @tasks.loop()
-    async def take_moves(self):
+    async def runner(self):
         check = (
             lambda payload: payload.user_id == self._turn_of.id
             and str(payload.emoji) in self._remaining_moves
@@ -107,7 +104,7 @@ class TicTacToe:
             await self.run_move(self._turn_of, emoji)
 
     def stop(self):
-        self.take_moves.stop()
+        self.runner.stop()
 
     def determine_winner(self):
         rows = []
@@ -143,7 +140,7 @@ class TicTacToe:
         else:
             await self.message.clear_reactions()
 
-    @take_moves.error
+    @runner.error
     async def error(self, e):
         traceback.print_exc()
 
@@ -158,4 +155,4 @@ class TicTacToe:
     async def start(self):
         await self.send_initial_message()
         await self.apply_reactions()
-        self.take_moves.start()
+        self.runner.start()

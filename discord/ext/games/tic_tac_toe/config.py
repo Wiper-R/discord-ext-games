@@ -1,8 +1,8 @@
 class CONFIG:
     __slots__ = (
         "blank",
-        "emoji_x",
-        "emoji_o",
+        "x",
+        "o",
         "up_left",
         "up",
         "up_right",
@@ -14,8 +14,8 @@ class CONFIG:
         "down_right",
     )
     blank = "\N{LARGE BLUE SQUARE}"
-    emoji_x = "\N{REGIONAL INDICATOR SYMBOL LETTER X}"
-    emoji_o = "\N{REGIONAL INDICATOR SYMBOL LETTER O}"
+    x = "\N{REGIONAL INDICATOR SYMBOL LETTER X}"
+    o = "\N{REGIONAL INDICATOR SYMBOL LETTER O}"
     up_left = "\N{NORTH WEST ARROW}"
     up = "\N{UPWARDS BLACK ARROW}"
     up_right = "\N{NORTH EAST ARROW}"
