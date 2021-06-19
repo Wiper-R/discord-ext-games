@@ -39,7 +39,7 @@ class TicTacToe:
     def refactor_config(self):
         self.config = {}
         _config = self._config.copy()
-        for slot in CONFIG.__slots__:
+        for slot in CONFIG._slots:
             try:
                 value = _config.pop(slot)
             except KeyError:
@@ -52,7 +52,9 @@ class TicTacToe:
             elif isinstance(value, str):
                 emoji = value
             else:
-                raise RuntimeError("Emoji must either be a discord snowflake or a unicode character.")
+                raise RuntimeError(
+                    "Emoji must either be a discord snowflake or a unicode character."
+                )
 
             self.config[slot] = emoji
 
@@ -61,7 +63,7 @@ class TicTacToe:
 
     def remaining_moves(self):
         self._remaining_moves = {}
-        for idx, slot in enumerate(CONFIG.__slots__[3:]):
+        for idx, slot in enumerate(CONFIG._slots[3:]):
             key = str(self.config[slot])
             self._remaining_moves[key] = idx
 
@@ -75,13 +77,17 @@ class TicTacToe:
         if len(self._remaining_moves) == 0 and self.winner is None:
             messages.append("Match Draw!\n")
         elif self.winner is None and len(self._remaining_moves) > 0:
-            messages.append(f"{self._turn_of} Turn **({self._moves[self._turn_of].value.upper()})**\n")
+            messages.append(
+                f"{self._turn_of} Turn **({self._moves[self._turn_of].value.upper()})**\n"
+            )
         elif self.winner is not None:
             messages.append(f"Winner {self.winner}!\n")
 
         # This statement creates board
         messages.append(
-            "\n".join("\u200b".join(board[i] for i in range(j, j + 3)) for j in range(0, 9, 3)),
+            "\n".join(
+                "\u200b".join(board[i] for i in range(j, j + 3)) for j in range(0, 9, 3)
+            ),
         )
 
         embed.description = "\n".join(messages)
@@ -95,7 +101,9 @@ class TicTacToe:
             and payload.message_id == self.message.id
         )
         try:
-            payload = await self.bot.wait_for("raw_reaction_add", check=check, timeout=30)
+            payload = await self.bot.wait_for(
+                "raw_reaction_add", check=check, timeout=30
+            )
             emoji = str(payload.emoji)
         except asyncio.TimeoutError:
             self.stop()

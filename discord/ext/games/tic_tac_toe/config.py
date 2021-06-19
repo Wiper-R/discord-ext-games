@@ -1,5 +1,5 @@
 class CONFIG:
-    __slots__ = (
+    _slots = (
         "blank",
         "x",
         "o",
