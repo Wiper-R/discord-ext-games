@@ -1,6 +1,6 @@
 class CONFIG:
     _slots = (
-        "blank",
+        "empty",
         "x",
         "o",
         "up_left",
@@ -13,7 +13,7 @@ class CONFIG:
         "down",
         "down_right",
     )
-    blank = "\N{LARGE BLUE SQUARE}"
+    empty = "\N{LARGE BLUE SQUARE}"
     x = "\N{REGIONAL INDICATOR SYMBOL LETTER X}"
     o = "\N{REGIONAL INDICATOR SYMBOL LETTER O}"
     up_left = "\N{NORTH WEST ARROW}"
